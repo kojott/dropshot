@@ -21,9 +21,9 @@ let package = Package(
                 .product(name: "KeyboardShortcuts", package: "KeyboardShortcuts")
             ],
             path: "DropShot",
+            exclude: ["App/Info.plist"],
             resources: [
-                .process("Resources"),
-                .copy("App/Info.plist")
+                .process("Resources")
             ]
         ),
         .testTarget(
