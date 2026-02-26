@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/icon.svg" alt="DropShot" width="128" height="128">
+  <img src="docs/images/icon.png" alt="DropShot" width="128" height="128">
 </p>
 
 <h1 align="center">DropShot</h1>
@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/images/hero.svg" alt="DropShot workflow: Drop → Upload → Paste" width="720">
+  <img src="docs/images/hero.png" alt="DropShot workflow: Drop → Upload → Paste" width="720">
 </p>
 
 ---
