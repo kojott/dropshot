@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  sftp:
+    image: atmoz/sftp
+    container_name: dropshot-test-sftp
+    ports:
+      - "2222:22"
+    command: testuser:testpass:1001:100:uploads
+    volumes:
+      - sftp-data:/home/testuser/uploads
+    healthcheck:
+      test: ["CMD", "ssh-keyscan", "-p", "22", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  nginx:
+    image: nginx:alpine
+    container_name: dropshot-test-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - sftp-data:/usr/share/nginx/html:ro
+    depends_on:
+      sftp:
+        condition: service_healthy
+
+volumes:
+  sftp-data:
+    driver: local

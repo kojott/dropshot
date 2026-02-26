@@ -1,0 +1,54 @@
+# Xcode
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+*.xcscmblueprint
+DerivedData/
+build/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/
+Package.resolved
+
+# CocoaPods (if ever used)
+Pods/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# IDE
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Build artifacts
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.app
+*.dmg
+
+# Secrets (never commit)
+*.p12
+*.cer
+*.mobileprovision
+*.provisionprofile
+
+# Test artifacts
+test-keys/
+
+# Claude Code
+CLAUDE.md

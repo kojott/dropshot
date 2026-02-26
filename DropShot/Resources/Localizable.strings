@@ -1,0 +1,283 @@
+/*
+   Localizable.strings (English)
+   DropShot - macOS Menu Bar SFTP Upload App
+
+   Copyright © 2026 DropShot Contributors. MIT License.
+*/
+
+
+// MARK: - App General
+
+"app.name" = "DropShot";
+"app.version" = "Version %@";
+"app.copyright" = "Copyright © 2026 DropShot Contributors";
+
+
+// MARK: - Menu Bar
+
+"menu.screenshot" = "Take Screenshot";
+"menu.screenshot.region" = "Capture Region";
+"menu.screenshot.window" = "Capture Window";
+"menu.screenshot.fullscreen" = "Capture Full Screen";
+"menu.upload.file" = "Upload File…";
+"menu.upload.clipboard" = "Upload from Clipboard";
+"menu.recent.uploads" = "Recent Uploads";
+"menu.recent.clear" = "Clear Recent Uploads";
+"menu.recent.empty" = "No Recent Uploads";
+"menu.preferences" = "Preferences…";
+"menu.about" = "About DropShot";
+"menu.check.updates" = "Check for Updates…";
+"menu.quit" = "Quit DropShot";
+"menu.separator.capture" = "Capture";
+"menu.separator.upload" = "Upload";
+
+
+// MARK: - Menu Bar Status
+
+"menu.status.idle" = "DropShot — Ready";
+"menu.status.uploading" = "Uploading…";
+"menu.status.success" = "Upload Complete";
+"menu.status.error" = "Upload Failed";
+
+
+// MARK: - Preferences - General
+
+"preferences.title" = "Preferences";
+"preferences.tab.general" = "General";
+"preferences.tab.server" = "Server";
+"preferences.tab.upload" = "Upload";
+"preferences.tab.shortcuts" = "Shortcuts";
+"preferences.tab.advanced" = "Advanced";
+
+"preferences.general.launch.at.login" = "Launch at login";
+"preferences.general.show.in.dock" = "Show in Dock";
+"preferences.general.notification.sound" = "Play notification sound";
+"preferences.general.notification.banner" = "Show notification banner";
+"preferences.general.copy.url.after.upload" = "Copy URL to clipboard after upload";
+"preferences.general.language" = "Language";
+"preferences.general.language.system" = "System Default";
+
+
+// MARK: - Preferences - Server
+
+"preferences.server.title" = "SFTP Server Configuration";
+"preferences.server.host" = "Host";
+"preferences.server.host.placeholder" = "example.com";
+"preferences.server.port" = "Port";
+"preferences.server.port.placeholder" = "22";
+"preferences.server.username" = "Username";
+"preferences.server.username.placeholder" = "your-username";
+"preferences.server.auth.method" = "Authentication Method";
+"preferences.server.auth.password" = "Password";
+"preferences.server.auth.key" = "SSH Key";
+"preferences.server.auth.agent" = "SSH Agent";
+"preferences.server.password" = "Password";
+"preferences.server.password.placeholder" = "Enter password";
+"preferences.server.key.path" = "SSH Key Path";
+"preferences.server.key.path.placeholder" = "~/.ssh/id_rsa";
+"preferences.server.key.browse" = "Browse…";
+"preferences.server.key.passphrase" = "Key Passphrase";
+"preferences.server.key.passphrase.placeholder" = "Enter passphrase (if any)";
+"preferences.server.remote.path" = "Remote Upload Path";
+"preferences.server.remote.path.placeholder" = "/var/www/uploads";
+"preferences.server.base.url" = "Base URL for Links";
+"preferences.server.base.url.placeholder" = "https://example.com/uploads";
+"preferences.server.test.connection" = "Test Connection";
+"preferences.server.test.success" = "Connection successful!";
+"preferences.server.test.failure" = "Connection failed: %@";
+"preferences.server.save" = "Save";
+
+
+// MARK: - Preferences - Upload
+
+"preferences.upload.title" = "Upload Settings";
+"preferences.upload.filename.format" = "Filename Format";
+"preferences.upload.filename.uuid" = "UUID (random)";
+"preferences.upload.filename.timestamp" = "Timestamp";
+"preferences.upload.filename.custom" = "Custom Prefix + Timestamp";
+"preferences.upload.filename.original" = "Original Filename";
+"preferences.upload.filename.prefix" = "Custom Prefix";
+"preferences.upload.filename.prefix.placeholder" = "screenshot";
+"preferences.upload.filename.preview" = "Preview: %@";
+"preferences.upload.image.format" = "Screenshot Format";
+"preferences.upload.image.format.png" = "PNG";
+"preferences.upload.image.format.jpg" = "JPEG";
+"preferences.upload.image.format.webp" = "WebP";
+"preferences.upload.image.quality" = "JPEG Quality";
+"preferences.upload.image.retina" = "Capture at Retina resolution";
+"preferences.upload.max.file.size" = "Maximum File Size (MB)";
+"preferences.upload.max.file.size.unlimited" = "Unlimited";
+"preferences.upload.organize.by.date" = "Organize by date (YYYY/MM subdirectories)";
+
+
+// MARK: - Preferences - Shortcuts
+
+"preferences.shortcuts.title" = "Keyboard Shortcuts";
+"preferences.shortcuts.capture.region" = "Capture Region";
+"preferences.shortcuts.capture.window" = "Capture Window";
+"preferences.shortcuts.capture.fullscreen" = "Capture Full Screen";
+"preferences.shortcuts.upload.clipboard" = "Upload from Clipboard";
+"preferences.shortcuts.upload.file" = "Upload File";
+"preferences.shortcuts.record" = "Click to record shortcut";
+"preferences.shortcuts.clear" = "Clear";
+"preferences.shortcuts.conflict" = "This shortcut conflicts with: %@";
+
+
+// MARK: - Preferences - Advanced
+
+"preferences.advanced.title" = "Advanced Settings";
+"preferences.advanced.connection.timeout" = "Connection Timeout (seconds)";
+"preferences.advanced.retry.count" = "Retry Attempts";
+"preferences.advanced.retry.delay" = "Retry Delay (seconds)";
+"preferences.advanced.concurrent.uploads" = "Concurrent Uploads";
+"preferences.advanced.keep.local.copy" = "Keep local copy of uploads";
+"preferences.advanced.local.copy.path" = "Local Copy Path";
+"preferences.advanced.local.copy.browse" = "Browse…";
+"preferences.advanced.debug.logging" = "Enable debug logging";
+"preferences.advanced.export.settings" = "Export Settings…";
+"preferences.advanced.import.settings" = "Import Settings…";
+"preferences.advanced.reset.settings" = "Reset to Defaults";
+"preferences.advanced.reset.confirm" = "Are you sure you want to reset all settings to defaults? This cannot be undone.";
+"preferences.advanced.reset.confirm.button" = "Reset";
+"preferences.advanced.cancel" = "Cancel";
+
+
+// MARK: - Setup Wizard
+
+"wizard.title" = "Welcome to DropShot";
+"wizard.subtitle" = "Let's set up your SFTP server in a few easy steps.";
+"wizard.step.server" = "Server";
+"wizard.step.auth" = "Authentication";
+"wizard.step.path" = "Upload Path";
+"wizard.step.test" = "Test";
+"wizard.step.done" = "Done";
+"wizard.step.count" = "Step %d of %d";
+
+"wizard.server.title" = "Server Details";
+"wizard.server.description" = "Enter the hostname and port of your SFTP server.";
+
+"wizard.auth.title" = "Authentication";
+"wizard.auth.description" = "Choose how to authenticate with your server.";
+
+"wizard.path.title" = "Upload Path";
+"wizard.path.description" = "Specify the remote directory and base URL for your uploads.";
+
+"wizard.test.title" = "Test Connection";
+"wizard.test.description" = "Let's verify everything works correctly.";
+"wizard.test.running" = "Testing connection…";
+"wizard.test.uploading" = "Uploading test file…";
+"wizard.test.verifying" = "Verifying URL access…";
+"wizard.test.success" = "Everything is working perfectly!";
+"wizard.test.failure" = "Something went wrong. Please check your settings.";
+"wizard.test.retry" = "Retry";
+
+"wizard.done.title" = "You're All Set!";
+"wizard.done.description" = "DropShot is ready to use. You can capture screenshots and upload files from the menu bar icon.";
+"wizard.done.tip" = "Tip: Set up keyboard shortcuts in Preferences for even faster uploads.";
+
+"wizard.button.next" = "Next";
+"wizard.button.back" = "Back";
+"wizard.button.skip" = "Skip";
+"wizard.button.finish" = "Finish";
+"wizard.button.test" = "Test Connection";
+
+
+// MARK: - Upload Progress
+
+"upload.progress.preparing" = "Preparing upload…";
+"upload.progress.connecting" = "Connecting to server…";
+"upload.progress.uploading" = "Uploading %@…";
+"upload.progress.percent" = "%d%% complete";
+"upload.progress.finishing" = "Finalizing upload…";
+"upload.progress.complete" = "Upload complete!";
+"upload.progress.cancel" = "Cancel Upload";
+"upload.progress.cancelled" = "Upload cancelled.";
+
+
+// MARK: - Notifications
+
+"notification.upload.success.title" = "Upload Complete";
+"notification.upload.success.body" = "URL copied to clipboard.";
+"notification.upload.success.body.file" = "%@ uploaded successfully.";
+"notification.upload.failure.title" = "Upload Failed";
+"notification.upload.failure.body" = "Could not upload file: %@";
+"notification.screenshot.saved" = "Screenshot saved.";
+"notification.url.copied" = "URL copied to clipboard.";
+"notification.update.available.title" = "Update Available";
+"notification.update.available.body" = "DropShot %@ is now available. You have %@.";
+
+
+// MARK: - Errors
+
+"error.connection.failed" = "Could not connect to server. Please check your settings.";
+"error.connection.timeout" = "Connection timed out. The server did not respond.";
+"error.auth.failed" = "Authentication failed. Please verify your credentials.";
+"error.auth.key.not.found" = "SSH key file not found at the specified path.";
+"error.auth.key.invalid" = "The SSH key file is invalid or corrupted.";
+"error.auth.passphrase.required" = "This SSH key requires a passphrase.";
+"error.upload.failed" = "File upload failed: %@";
+"error.upload.permission.denied" = "Permission denied. Cannot write to the remote directory.";
+"error.upload.disk.full" = "Remote server disk is full.";
+"error.upload.file.too.large" = "File exceeds the maximum size limit of %@ MB.";
+"error.upload.no.server" = "No server configured. Please set up a server in Preferences.";
+"error.screenshot.failed" = "Screenshot capture failed.";
+"error.screenshot.permission" = "Screen Recording permission is required. Please grant access in System Settings > Privacy & Security.";
+"error.clipboard.empty" = "Clipboard is empty or does not contain an image.";
+"error.clipboard.unsupported" = "Clipboard content type is not supported for upload.";
+"error.file.not.found" = "The selected file could not be found.";
+"error.file.read.failed" = "Could not read the selected file.";
+"error.settings.export.failed" = "Could not export settings: %@";
+"error.settings.import.failed" = "Could not import settings: %@";
+"error.settings.import.invalid" = "The selected file is not a valid DropShot settings file.";
+"error.network.unavailable" = "Network connection is unavailable.";
+"error.unknown" = "An unexpected error occurred. Please try again.";
+
+
+// MARK: - File Picker
+
+"filepicker.title" = "Select File to Upload";
+"filepicker.key.title" = "Select SSH Key File";
+"filepicker.settings.export.title" = "Export Settings";
+"filepicker.settings.import.title" = "Import Settings";
+
+
+// MARK: - Confirmation Dialogs
+
+"dialog.quit.title" = "Quit DropShot?";
+"dialog.quit.message" = "An upload is currently in progress. Quitting will cancel the upload.";
+"dialog.quit.cancel" = "Continue Upload";
+"dialog.quit.confirm" = "Quit";
+
+"dialog.delete.history.title" = "Clear Upload History?";
+"dialog.delete.history.message" = "This will remove all entries from the recent uploads list. Uploaded files on the server will not be affected.";
+"dialog.delete.history.confirm" = "Clear History";
+"dialog.delete.history.cancel" = "Cancel";
+
+
+// MARK: - About
+
+"about.title" = "About DropShot";
+"about.description" = "A lightweight macOS menu bar app for uploading screenshots and files via SFTP.";
+"about.version" = "Version %@ (Build %@)";
+"about.license" = "MIT License";
+"about.github" = "View on GitHub";
+"about.acknowledgements" = "Acknowledgements";
+
+
+// MARK: - Accessibility
+
+"accessibility.menu.bar.icon" = "DropShot menu bar icon";
+"accessibility.menu.bar.icon.uploading" = "DropShot is uploading a file";
+"accessibility.menu.bar.icon.success" = "DropShot upload complete";
+"accessibility.menu.bar.icon.error" = "DropShot upload failed";
+"accessibility.upload.progress" = "Upload progress: %d percent";
+"accessibility.screenshot.region" = "Capture a region of the screen";
+"accessibility.screenshot.window" = "Capture a window";
+"accessibility.screenshot.fullscreen" = "Capture the full screen";
+"accessibility.upload.file" = "Upload a file from disk";
+"accessibility.upload.clipboard" = "Upload image from clipboard";
+"accessibility.preferences.open" = "Open preferences window";
+"accessibility.connection.test" = "Test SFTP server connection";
+"accessibility.shortcut.record" = "Record keyboard shortcut for %@";
+"accessibility.recent.upload.item" = "%@, uploaded %@, click to copy URL";
+"accessibility.wizard.progress" = "Setup wizard, step %d of %d";

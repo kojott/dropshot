@@ -1,0 +1,283 @@
+/*
+   Localizable.strings (Czech / Čeština)
+   DropShot - macOS Menu Bar SFTP Upload App
+
+   Copyright © 2026 DropShot Contributors. MIT License.
+*/
+
+
+// MARK: - App General
+
+"app.name" = "DropShot";
+"app.version" = "Verze %@";
+"app.copyright" = "Copyright © 2026 DropShot Contributors";
+
+
+// MARK: - Menu Bar
+
+"menu.screenshot" = "Pořídit snímek";
+"menu.screenshot.region" = "Zachytit oblast";
+"menu.screenshot.window" = "Zachytit okno";
+"menu.screenshot.fullscreen" = "Zachytit celou obrazovku";
+"menu.upload.file" = "Nahrát soubor…";
+"menu.upload.clipboard" = "Nahrát ze schránky";
+"menu.recent.uploads" = "Poslední nahrávání";
+"menu.recent.clear" = "Vymazat historii nahrávání";
+"menu.recent.empty" = "Žádná nedávná nahrávání";
+"menu.preferences" = "Předvolby…";
+"menu.about" = "O aplikaci DropShot";
+"menu.check.updates" = "Zkontrolovat aktualizace…";
+"menu.quit" = "Ukončit DropShot";
+"menu.separator.capture" = "Snímání";
+"menu.separator.upload" = "Nahrávání";
+
+
+// MARK: - Menu Bar Status
+
+"menu.status.idle" = "DropShot — Připraveno";
+"menu.status.uploading" = "Nahrávání…";
+"menu.status.success" = "Nahrávání dokončeno";
+"menu.status.error" = "Nahrávání selhalo";
+
+
+// MARK: - Preferences - General
+
+"preferences.title" = "Předvolby";
+"preferences.tab.general" = "Obecné";
+"preferences.tab.server" = "Server";
+"preferences.tab.upload" = "Nahrávání";
+"preferences.tab.shortcuts" = "Klávesové zkratky";
+"preferences.tab.advanced" = "Pokročilé";
+
+"preferences.general.launch.at.login" = "Spustit při přihlášení";
+"preferences.general.show.in.dock" = "Zobrazit v Docku";
+"preferences.general.notification.sound" = "Přehrát zvuk oznámení";
+"preferences.general.notification.banner" = "Zobrazit banner oznámení";
+"preferences.general.copy.url.after.upload" = "Po nahrání zkopírovat URL do schránky";
+"preferences.general.language" = "Jazyk";
+"preferences.general.language.system" = "Výchozí systémový";
+
+
+// MARK: - Preferences - Server
+
+"preferences.server.title" = "Nastavení SFTP serveru";
+"preferences.server.host" = "Hostitel";
+"preferences.server.host.placeholder" = "example.com";
+"preferences.server.port" = "Port";
+"preferences.server.port.placeholder" = "22";
+"preferences.server.username" = "Uživatelské jméno";
+"preferences.server.username.placeholder" = "vaše-jméno";
+"preferences.server.auth.method" = "Způsob ověření";
+"preferences.server.auth.password" = "Heslo";
+"preferences.server.auth.key" = "SSH klíč";
+"preferences.server.auth.agent" = "SSH agent";
+"preferences.server.password" = "Heslo";
+"preferences.server.password.placeholder" = "Zadejte heslo";
+"preferences.server.key.path" = "Cesta k SSH klíči";
+"preferences.server.key.path.placeholder" = "~/.ssh/id_rsa";
+"preferences.server.key.browse" = "Procházet…";
+"preferences.server.key.passphrase" = "Heslo ke klíči";
+"preferences.server.key.passphrase.placeholder" = "Zadejte heslo ke klíči (pokud je vyžadováno)";
+"preferences.server.remote.path" = "Vzdálená cesta pro nahrávání";
+"preferences.server.remote.path.placeholder" = "/var/www/uploads";
+"preferences.server.base.url" = "Základní URL pro odkazy";
+"preferences.server.base.url.placeholder" = "https://example.com/uploads";
+"preferences.server.test.connection" = "Otestovat připojení";
+"preferences.server.test.success" = "Připojení bylo úspěšné!";
+"preferences.server.test.failure" = "Připojení selhalo: %@";
+"preferences.server.save" = "Uložit";
+
+
+// MARK: - Preferences - Upload
+
+"preferences.upload.title" = "Nastavení nahrávání";
+"preferences.upload.filename.format" = "Formát názvu souboru";
+"preferences.upload.filename.uuid" = "UUID (náhodný)";
+"preferences.upload.filename.timestamp" = "Časové razítko";
+"preferences.upload.filename.custom" = "Vlastní prefix + časové razítko";
+"preferences.upload.filename.original" = "Původní název souboru";
+"preferences.upload.filename.prefix" = "Vlastní prefix";
+"preferences.upload.filename.prefix.placeholder" = "snimek";
+"preferences.upload.filename.preview" = "Náhled: %@";
+"preferences.upload.image.format" = "Formát snímku obrazovky";
+"preferences.upload.image.format.png" = "PNG";
+"preferences.upload.image.format.jpg" = "JPEG";
+"preferences.upload.image.format.webp" = "WebP";
+"preferences.upload.image.quality" = "Kvalita JPEG";
+"preferences.upload.image.retina" = "Zachytit v Retina rozlišení";
+"preferences.upload.max.file.size" = "Maximální velikost souboru (MB)";
+"preferences.upload.max.file.size.unlimited" = "Bez omezení";
+"preferences.upload.organize.by.date" = "Řadit do složek podle data (RRRR/MM)";
+
+
+// MARK: - Preferences - Shortcuts
+
+"preferences.shortcuts.title" = "Klávesové zkratky";
+"preferences.shortcuts.capture.region" = "Zachytit oblast";
+"preferences.shortcuts.capture.window" = "Zachytit okno";
+"preferences.shortcuts.capture.fullscreen" = "Zachytit celou obrazovku";
+"preferences.shortcuts.upload.clipboard" = "Nahrát ze schránky";
+"preferences.shortcuts.upload.file" = "Nahrát soubor";
+"preferences.shortcuts.record" = "Klikněte pro nastavení zkratky";
+"preferences.shortcuts.clear" = "Smazat";
+"preferences.shortcuts.conflict" = "Tato zkratka je v konfliktu s: %@";
+
+
+// MARK: - Preferences - Advanced
+
+"preferences.advanced.title" = "Pokročilé nastavení";
+"preferences.advanced.connection.timeout" = "Časový limit připojení (sekundy)";
+"preferences.advanced.retry.count" = "Počet pokusů o opakování";
+"preferences.advanced.retry.delay" = "Prodleva mezi pokusy (sekundy)";
+"preferences.advanced.concurrent.uploads" = "Souběžná nahrávání";
+"preferences.advanced.keep.local.copy" = "Ponechat lokální kopii nahraných souborů";
+"preferences.advanced.local.copy.path" = "Cesta k lokálním kopiím";
+"preferences.advanced.local.copy.browse" = "Procházet…";
+"preferences.advanced.debug.logging" = "Zapnout ladící protokolování";
+"preferences.advanced.export.settings" = "Exportovat nastavení…";
+"preferences.advanced.import.settings" = "Importovat nastavení…";
+"preferences.advanced.reset.settings" = "Obnovit výchozí nastavení";
+"preferences.advanced.reset.confirm" = "Opravdu chcete obnovit všechna nastavení na výchozí hodnoty? Tuto akci nelze vrátit zpět.";
+"preferences.advanced.reset.confirm.button" = "Obnovit";
+"preferences.advanced.cancel" = "Zrušit";
+
+
+// MARK: - Setup Wizard
+
+"wizard.title" = "Vítejte v DropShotu";
+"wizard.subtitle" = "Pojďme nastavit váš SFTP server v několika jednoduchých krocích.";
+"wizard.step.server" = "Server";
+"wizard.step.auth" = "Ověření";
+"wizard.step.path" = "Cesta pro nahrávání";
+"wizard.step.test" = "Test";
+"wizard.step.done" = "Hotovo";
+"wizard.step.count" = "Krok %d z %d";
+
+"wizard.server.title" = "Údaje o serveru";
+"wizard.server.description" = "Zadejte název hostitele a port vašeho SFTP serveru.";
+
+"wizard.auth.title" = "Ověření";
+"wizard.auth.description" = "Zvolte způsob ověření na serveru.";
+
+"wizard.path.title" = "Cesta pro nahrávání";
+"wizard.path.description" = "Zadejte vzdálený adresář a základní URL pro vaše nahrané soubory.";
+
+"wizard.test.title" = "Test připojení";
+"wizard.test.description" = "Ověříme, že vše funguje správně.";
+"wizard.test.running" = "Testování připojení…";
+"wizard.test.uploading" = "Nahrávání testovacího souboru…";
+"wizard.test.verifying" = "Ověřování dostupnosti URL…";
+"wizard.test.success" = "Vše funguje správně!";
+"wizard.test.failure" = "Něco se nepovedlo. Zkontrolujte prosím nastavení.";
+"wizard.test.retry" = "Zkusit znovu";
+
+"wizard.done.title" = "Vše je připraveno!";
+"wizard.done.description" = "DropShot je připraven k použití. Snímky obrazovky a soubory můžete nahrávat přes ikonu v řádku nabídek.";
+"wizard.done.tip" = "Tip: V předvolbách si nastavte klávesové zkratky pro ještě rychlejší nahrávání.";
+
+"wizard.button.next" = "Další";
+"wizard.button.back" = "Zpět";
+"wizard.button.skip" = "Přeskočit";
+"wizard.button.finish" = "Dokončit";
+"wizard.button.test" = "Otestovat připojení";
+
+
+// MARK: - Upload Progress
+
+"upload.progress.preparing" = "Příprava nahrávání…";
+"upload.progress.connecting" = "Připojování k serveru…";
+"upload.progress.uploading" = "Nahrávání %@…";
+"upload.progress.percent" = "%d %% dokončeno";
+"upload.progress.finishing" = "Dokončování nahrávání…";
+"upload.progress.complete" = "Nahrávání dokončeno!";
+"upload.progress.cancel" = "Zrušit nahrávání";
+"upload.progress.cancelled" = "Nahrávání zrušeno.";
+
+
+// MARK: - Notifications
+
+"notification.upload.success.title" = "Nahrávání dokončeno";
+"notification.upload.success.body" = "URL zkopírována do schránky.";
+"notification.upload.success.body.file" = "Soubor %@ byl úspěšně nahrán.";
+"notification.upload.failure.title" = "Nahrávání selhalo";
+"notification.upload.failure.body" = "Soubor se nepodařilo nahrát: %@";
+"notification.screenshot.saved" = "Snímek obrazovky uložen.";
+"notification.url.copied" = "URL zkopírována do schránky.";
+"notification.update.available.title" = "Dostupná aktualizace";
+"notification.update.available.body" = "DropShot %@ je nyní k dispozici. Vaše verze je %@.";
+
+
+// MARK: - Errors
+
+"error.connection.failed" = "Nepodařilo se připojit k serveru. Zkontrolujte prosím nastavení.";
+"error.connection.timeout" = "Časový limit připojení vypršel. Server neodpověděl.";
+"error.auth.failed" = "Ověření selhalo. Zkontrolujte prosím přihlašovací údaje.";
+"error.auth.key.not.found" = "Soubor SSH klíče nebyl na zadané cestě nalezen.";
+"error.auth.key.invalid" = "Soubor SSH klíče je neplatný nebo poškozený.";
+"error.auth.passphrase.required" = "Tento SSH klíč vyžaduje heslo.";
+"error.upload.failed" = "Nahrávání souboru selhalo: %@";
+"error.upload.permission.denied" = "Přístup odepřen. Do vzdáleného adresáře nelze zapisovat.";
+"error.upload.disk.full" = "Disk na vzdáleném serveru je plný.";
+"error.upload.file.too.large" = "Soubor překračuje maximální velikost %@ MB.";
+"error.upload.no.server" = "Není nastaven žádný server. Nastavte prosím server v předvolbách.";
+"error.screenshot.failed" = "Pořízení snímku obrazovky selhalo.";
+"error.screenshot.permission" = "Je vyžadováno oprávnění k nahrávání obrazovky. Povolte přístup v Nastavení systému > Soukromí a zabezpečení.";
+"error.clipboard.empty" = "Schránka je prázdná nebo neobsahuje obrázek.";
+"error.clipboard.unsupported" = "Typ obsahu ve schránce není podporován pro nahrávání.";
+"error.file.not.found" = "Vybraný soubor nebyl nalezen.";
+"error.file.read.failed" = "Vybraný soubor se nepodařilo přečíst.";
+"error.settings.export.failed" = "Nastavení se nepodařilo exportovat: %@";
+"error.settings.import.failed" = "Nastavení se nepodařilo importovat: %@";
+"error.settings.import.invalid" = "Vybraný soubor není platný soubor nastavení DropShotu.";
+"error.network.unavailable" = "Síťové připojení není k dispozici.";
+"error.unknown" = "Došlo k neočekávané chybě. Zkuste to prosím znovu.";
+
+
+// MARK: - File Picker
+
+"filepicker.title" = "Vyberte soubor k nahrání";
+"filepicker.key.title" = "Vyberte soubor SSH klíče";
+"filepicker.settings.export.title" = "Exportovat nastavení";
+"filepicker.settings.import.title" = "Importovat nastavení";
+
+
+// MARK: - Confirmation Dialogs
+
+"dialog.quit.title" = "Ukončit DropShot?";
+"dialog.quit.message" = "Právě probíhá nahrávání. Ukončením aplikace bude nahrávání zrušeno.";
+"dialog.quit.cancel" = "Pokračovat v nahrávání";
+"dialog.quit.confirm" = "Ukončit";
+
+"dialog.delete.history.title" = "Vymazat historii nahrávání?";
+"dialog.delete.history.message" = "Tímto odstraníte všechny záznamy z historie nedávných nahrávání. Nahrané soubory na serveru nebudou ovlivněny.";
+"dialog.delete.history.confirm" = "Vymazat historii";
+"dialog.delete.history.cancel" = "Zrušit";
+
+
+// MARK: - About
+
+"about.title" = "O aplikaci DropShot";
+"about.description" = "Jednoduchá aplikace pro macOS v řádku nabídek pro nahrávání snímků obrazovky a souborů přes SFTP.";
+"about.version" = "Verze %@ (sestavení %@)";
+"about.license" = "Licence MIT";
+"about.github" = "Zobrazit na GitHubu";
+"about.acknowledgements" = "Poděkování";
+
+
+// MARK: - Accessibility
+
+"accessibility.menu.bar.icon" = "Ikona DropShotu v řádku nabídek";
+"accessibility.menu.bar.icon.uploading" = "DropShot nahrává soubor";
+"accessibility.menu.bar.icon.success" = "Nahrávání v DropShotu dokončeno";
+"accessibility.menu.bar.icon.error" = "Nahrávání v DropShotu selhalo";
+"accessibility.upload.progress" = "Průběh nahrávání: %d procent";
+"accessibility.screenshot.region" = "Zachytit oblast obrazovky";
+"accessibility.screenshot.window" = "Zachytit okno";
+"accessibility.screenshot.fullscreen" = "Zachytit celou obrazovku";
+"accessibility.upload.file" = "Nahrát soubor z disku";
+"accessibility.upload.clipboard" = "Nahrát obrázek ze schránky";
+"accessibility.preferences.open" = "Otevřít předvolby";
+"accessibility.connection.test" = "Otestovat připojení k SFTP serveru";
+"accessibility.shortcut.record" = "Nastavit klávesovou zkratku pro %@";
+"accessibility.recent.upload.item" = "%@, nahráno %@, kliknutím zkopírujete URL";
+"accessibility.wizard.progress" = "Průvodce nastavením, krok %d z %d";
