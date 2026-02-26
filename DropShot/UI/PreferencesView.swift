@@ -535,10 +535,11 @@ private struct GeneralTab: View {
         panel.allowedContentTypes = [.plainText]
         panel.canCreateDirectories = true
 
+        // Capture MainActor-isolated values before the nonisolated NSSavePanel callback
+        let logContent = buildDiagnosticLog()
+
         panel.begin { response in
             guard response == .OK, let url = panel.url else { return }
-
-            let logContent = buildDiagnosticLog()
             do {
                 try logContent.write(to: url, atomically: true, encoding: .utf8)
                 showExportSuccess = true
