@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="DropShot/Resources/Assets.xcassets/AppIcon.appiconset/icon.png" alt="DropShot" width="128" height="128">
+  <img src="docs/images/icon.svg" alt="DropShot" width="128" height="128">
 </p>
 
 <h1 align="center">DropShot</h1>
@@ -9,14 +9,16 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/nickarino/DropShot/actions/workflows/ci.yml"><img src="https://github.com/nickarino/DropShot/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/kojott/dropshot/actions/workflows/ci.yml"><img src="https://github.com/kojott/dropshot/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <img src="https://img.shields.io/badge/version-1.0.0-blue" alt="Version 1.0.0">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/macOS-13%2B-black?logo=apple" alt="macOS 13+">
   <img src="https://img.shields.io/badge/Swift-5.9-orange?logo=swift" alt="Swift 5.9">
 </p>
 
-<!-- TODO: Add hero GIF showing drag → upload → paste path in terminal -->
+<p align="center">
+  <img src="docs/images/hero.svg" alt="DropShot workflow: Drop → Upload → Paste" width="720">
+</p>
 
 ---
 
@@ -51,7 +53,7 @@ brew install --cask dropshot
 
 ### Download DMG
 
-Download the latest `.dmg` from the [Releases](https://github.com/nickarino/DropShot/releases/latest) page, open it, and drag **DropShot.app** into your Applications folder.
+Download the latest `.dmg` from the [Releases](https://github.com/kojott/dropshot/releases/latest) page, open it, and drag **DropShot.app** into your Applications folder.
 
 ### Build from source
 
@@ -89,7 +91,7 @@ Open Preferences from the menu bar icon to configure:
 ### Build
 
 ```bash
-git clone https://github.com/nickarino/DropShot.git
+git clone https://github.com/kojott/dropshot.git
 cd DropShot
 swift build
 ```
