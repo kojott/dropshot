@@ -70,7 +70,7 @@ struct PathBuilder {
         let trimmedFile = filename.hasPrefix("/") ? String(filename.dropFirst()) : filename
 
         if trimmedDir.isEmpty {
-            return trimmedFile.isEmpty ? "/" : trimmedFile
+            return trimmedFile
         }
         if trimmedFile.isEmpty {
             return trimmedDir
