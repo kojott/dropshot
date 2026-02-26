@@ -650,7 +650,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             let recent = await historyService.recentRecords(limit: 1)
             if let lastRecord = recent.first,
                lastRecord.status == .failed {
-                let fileURL = URL(fileURLWithPath: lastRecord.serverPath)
                 logger.info("Retrying upload for: \(lastRecord.filename)")
                 // Note: retry from server path is not directly possible since
                 // we need the local file. Show preferences so the user can

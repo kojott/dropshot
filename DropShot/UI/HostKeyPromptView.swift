@@ -107,7 +107,7 @@ struct UnknownHostView: View {
             }
         }
         .padding(24)
-        .frame(width: 400, minHeight: 360)
+        .frame(width: 400, height: 360)
     }
 }
 
@@ -209,7 +209,7 @@ struct HostKeyChangedView: View {
             }
         }
         .padding(24)
-        .frame(width: 420, minHeight: 420)
+        .frame(width: 420, height: 420)
     }
 
     // MARK: - Helpers

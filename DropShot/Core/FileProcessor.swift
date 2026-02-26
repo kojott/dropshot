@@ -222,12 +222,14 @@ struct FileProcessor {
         let availableBytes = maxBytes - extensionBytes
 
         guard availableBytes > 0 else {
-            // Extension itself exceeds the limit; truncate the whole thing
-            return String(filename.unicodeScalars.prefix(while: {
-                var copy = filename.unicodeScalars.prefix(0)
-                _ = copy  // just need the byte count check below
-                return true
-            }))
+            // Extension itself exceeds the limit; truncate at byte boundary
+            var result = ""
+            for scalar in filename.unicodeScalars {
+                let candidate = result + String(scalar)
+                if candidate.utf8.count > maxBytes { break }
+                result = candidate
+            }
+            return result
         }
 
         // Truncate base at a unicode scalar boundary that fits within availableBytes

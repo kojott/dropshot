@@ -463,10 +463,13 @@ actor SystemSFTPTransport: SFTPTransport {
         }
 
         // Read stdout and stderr concurrently.
+        // Use nonisolated(unsafe) since access is synchronized via DispatchGroup:
+        // each var is written exactly once (in its own async block) and read only
+        // after all blocks have completed (in group.notify).
         return await withCheckedContinuation { continuation in
             let group = DispatchGroup()
-            var stdoutData = Data()
-            var stderrData = Data()
+            nonisolated(unsafe) var stdoutData = Data()
+            nonisolated(unsafe) var stderrData = Data()
 
             group.enter()
             DispatchQueue.global(qos: .userInitiated).async {

@@ -551,8 +551,11 @@ private struct GeneralTab: View {
         }
     }
 
+    @MainActor
     private func buildDiagnosticLog() -> String {
         let settings = AppSettings.shared
+        let networkConnected = NetworkMonitor.shared.isConnected
+        let networkType = NetworkMonitor.shared.connectionType
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
 
@@ -572,8 +575,8 @@ private struct GeneralTab: View {
           Clipboard Shortcut Enabled: \(settings.clipboardUploadShortcutEnabled)
           Setup Completed: \(settings.hasCompletedSetup)
         Network:
-          Connected: \(NetworkMonitor.shared.isConnected)
-          Connection Type: \(NetworkMonitor.shared.connectionType)
+          Connected: \(networkConnected)
+          Connection Type: \(networkType)
         ----------------------------------------
         """
         log += "\nEnd of diagnostic log.\n"

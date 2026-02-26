@@ -274,7 +274,7 @@ private struct UploadRecordRow: View {
                     if record.status == .completed {
                         Text("  \(record.formattedTimestamp)")
                             .font(.caption2)
-                            .foregroundColor(.tertiary)
+                            .foregroundColor(.secondary.opacity(0.7))
                     }
                 }
             }
