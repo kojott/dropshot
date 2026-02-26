@@ -24,8 +24,8 @@ final class ScreenshotManager {
 
     // MARK: - Init
 
-    init(uploadManager: UploadManager = .shared) {
-        self.uploadManager = uploadManager
+    init(uploadManager: UploadManager? = nil) {
+        self.uploadManager = uploadManager ?? UploadManager.shared
     }
 
     // MARK: - Public API

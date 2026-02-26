@@ -20,7 +20,11 @@ let package = Package(
             dependencies: [
                 .product(name: "KeyboardShortcuts", package: "KeyboardShortcuts")
             ],
-            path: "DropShot"
+            path: "DropShot",
+            resources: [
+                .process("Resources"),
+                .copy("App/Info.plist")
+            ]
         ),
         .testTarget(
             name: "DropShotTests",

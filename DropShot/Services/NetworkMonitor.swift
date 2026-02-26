@@ -73,7 +73,7 @@ final class NetworkMonitor: ObservableObject {
     /// Determines the connection type from an NWPath by inspecting which
     /// interface types are available. The order of checks reflects priority:
     /// Wi-Fi and Ethernet are most common on macOS.
-    private static func resolveConnectionType(from path: NWPath) -> ConnectionType {
+    nonisolated private static func resolveConnectionType(from path: NWPath) -> ConnectionType {
         if path.usesInterfaceType(.wifi) {
             return .wifi
         } else if path.usesInterfaceType(.wiredEthernet) {

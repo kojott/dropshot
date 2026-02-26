@@ -58,11 +58,11 @@ final class UploadManager: ObservableObject {
     init(
         transport: (any SFTPTransport)? = nil,
         historyService: HistoryService = .shared,
-        notificationService: NotificationService = .shared
+        notificationService: NotificationService? = nil
     ) {
         self.transport = transport
         self.historyService = historyService
-        self.notificationService = notificationService
+        self.notificationService = notificationService ?? NotificationService.shared
     }
 
     // MARK: - Public API
@@ -310,41 +310,37 @@ final class UploadManager: ObservableObject {
             let record = uploadQueue[recordIndex]
             currentUpload = record
 
-            let result = await uploadSingleFile(
+            let resultRecord = await uploadSingleFile(
                 localURL: localURL,
                 record: record
             )
 
-            switch result {
-            case .success(let completedRecord):
-                updateQueueRecord(completedRecord)
-                currentUpload = completedRecord
-                await historyService.addRecord(completedRecord)
-                successfulClipboardTexts.append(completedRecord.clipboardText)
-                logger.info("Upload succeeded: \(completedRecord.filename)")
+            updateQueueRecord(resultRecord)
+            currentUpload = resultRecord
+            await historyService.addRecord(resultRecord)
+
+            if resultRecord.status == .completed {
+                successfulClipboardTexts.append(resultRecord.clipboardText)
+                logger.info("Upload succeeded: \(resultRecord.filename)")
 
                 // For single-file batches, copy immediately and notify.
                 if totalFiles == 1 {
-                    copyToClipboard(completedRecord.clipboardText)
+                    copyToClipboard(resultRecord.clipboardText)
                     notificationService.showUploadSuccess(
-                        filename: completedRecord.filename,
-                        clipboardText: completedRecord.clipboardText
+                        filename: resultRecord.filename,
+                        clipboardText: resultRecord.clipboardText
                     )
                 }
-
-            case .failure(let failedRecord):
-                updateQueueRecord(failedRecord)
-                currentUpload = failedRecord
-                await historyService.addRecord(failedRecord)
-                logger.error("Upload failed: \(failedRecord.filename) - \(failedRecord.errorMessage ?? "unknown")")
+            } else {
+                logger.error("Upload failed: \(resultRecord.filename) - \(resultRecord.errorMessage ?? "unknown")")
 
                 // For single-file batches, notify immediately.
                 if totalFiles == 1 {
                     let error = NSError(domain: "com.dropshot", code: 3, userInfo: [
-                        NSLocalizedDescriptionKey: failedRecord.errorMessage ?? "Upload failed."
+                        NSLocalizedDescriptionKey: resultRecord.errorMessage ?? "Upload failed."
                     ])
                     notificationService.showUploadFailure(
-                        filename: failedRecord.filename,
+                        filename: resultRecord.filename,
                         error: error
                     )
                 }
@@ -374,17 +370,17 @@ final class UploadManager: ObservableObject {
     /// Uploads a single file, retrying up to `maxRetries` times for connection
     /// errors with exponential backoff.
     ///
-    /// - Returns: `.success` with the completed record, or `.failure` with the
-    ///   failed record.
+    /// - Returns: The completed or failed `UploadRecord`. Check its `status`
+    ///   property to determine the outcome.
     private func uploadSingleFile(
         localURL: URL,
         record: UploadRecord
-    ) async -> Result<UploadRecord, UploadRecord> {
+    ) async -> UploadRecord {
         var lastError: Error?
 
         for attempt in 0...maxRetries {
             guard !isCancelled, !Task.isCancelled else {
-                let cancelled = UploadRecord(
+                return UploadRecord(
                     id: record.id,
                     filename: record.filename,
                     serverPath: record.serverPath,
@@ -397,7 +393,6 @@ final class UploadManager: ObservableObject {
                     errorMessage: "Upload cancelled by user.",
                     serverConfigId: record.serverConfigId
                 )
-                return .failure(cancelled)
             }
 
             // Wait before retrying (skip delay on first attempt).
@@ -413,7 +408,7 @@ final class UploadManager: ObservableObject {
                     localURL: localURL,
                     record: record
                 )
-                return .success(completedRecord)
+                return completedRecord
             } catch {
                 lastError = error
                 logger.error("Upload attempt \(attempt + 1) failed for \(record.filename): \(error.localizedDescription)")
@@ -427,8 +422,7 @@ final class UploadManager: ObservableObject {
 
         // All attempts exhausted.
         let errorMessage = lastError?.localizedDescription ?? "Unknown error"
-        let failedRecord = record.failed(error: errorMessage)
-        return .failure(failedRecord)
+        return record.failed(error: errorMessage)
     }
 
     /// Executes the actual SFTP upload for a single file.
