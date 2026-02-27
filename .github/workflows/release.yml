@@ -91,6 +91,13 @@ jobs:
           cp .build/universal/DropShot DropShot.app/Contents/MacOS/
           cp DropShot/App/Info.plist DropShot.app/Contents/
 
+          # Copy SPM resource bundles into the .app root.
+          # Bundle.module resolves via Bundle.main.bundleURL which for .app
+          # bundles points to the .app directory itself, not Contents/MacOS/.
+          for bundle in .build/arm64-apple-macosx/release/*.bundle; do
+            cp -R "$bundle" DropShot.app/
+          done
+
           # Compile asset catalog (app icon) into the bundle
           xcrun actool DropShot/Resources/Assets.xcassets \
             --compile DropShot.app/Contents/Resources \
