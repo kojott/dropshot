@@ -45,12 +45,6 @@ DropShot is a macOS menu bar utility that uploads files to your own server via S
 
 ## Installation
 
-### Homebrew (recommended)
-
-```bash
-brew install --cask dropshot
-```
-
 ### Download DMG
 
 Download the latest `.dmg` from the [Releases](https://github.com/kojott/dropshot/releases/latest) page, open it, and drag **DropShot.app** into your Applications folder.
