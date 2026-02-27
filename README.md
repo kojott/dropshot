@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/kojott/dropshot/actions/workflows/ci.yml"><img src="https://github.com/kojott/dropshot/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <img src="https://img.shields.io/badge/version-1.0.2-blue" alt="Version 1.0.0">
+  <img src="https://img.shields.io/badge/version-1.0.3-blue" alt="Version 1.0.0">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/macOS-13%2B-black?logo=apple" alt="macOS 13+">
   <img src="https://img.shields.io/badge/Swift-5.9-orange?logo=swift" alt="Swift 5.9">
