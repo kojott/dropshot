@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 
+
 ## [1.1.0] - 
 
 ## [1.0.5] - 
@@ -51,7 +53,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Homebrew cask formula
 - Server setup guide for new users
 
-[Unreleased]: https://github.com/kojott/dropshot/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/kojott/dropshot/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/kojott/dropshot/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/kojott/dropshot/compare/v1.0.5...v1.1.0
 [1.0.5]: https://github.com/kojott/dropshot/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/kojott/dropshot/compare/v1.0.3...v1.0.4
