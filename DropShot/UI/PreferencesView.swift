@@ -39,8 +39,11 @@ enum PreferencesTab: String, CaseIterable, Identifiable {
 // MARK: - Preferences View
 
 /// Sidebar-navigated preferences window for configuring DropShot.
+/// Tabs are created lazily on first visit and kept alive to avoid
+/// destroying NSViewRepresentable controls (KeyboardShortcuts.Recorder).
 struct PreferencesView: View {
     @State private var selectedTab: PreferencesTab = .server
+    @State private var visitedTabs: Set<PreferencesTab> = [.server]
 
     var body: some View {
         HStack(spacing: 0) {
@@ -49,6 +52,9 @@ struct PreferencesView: View {
             content
         }
         .frame(width: 620, height: 480)
+        .onChange(of: selectedTab) { newTab in
+            visitedTabs.insert(newTab)
+        }
     }
 
     private var sidebar: some View {
@@ -67,21 +73,31 @@ struct PreferencesView: View {
 
     private var content: some View {
         ZStack {
-            ServerTab()
-                .opacity(selectedTab == .server ? 1 : 0)
-                .accessibilityHidden(selectedTab != .server)
-            UploadsTab()
-                .opacity(selectedTab == .uploads ? 1 : 0)
-                .accessibilityHidden(selectedTab != .uploads)
-            ShortcutsTab()
-                .opacity(selectedTab == .shortcuts ? 1 : 0)
-                .accessibilityHidden(selectedTab != .shortcuts)
-            GeneralTab()
-                .opacity(selectedTab == .general ? 1 : 0)
-                .accessibilityHidden(selectedTab != .general)
-            AdvancedTab()
-                .opacity(selectedTab == .advanced ? 1 : 0)
-                .accessibilityHidden(selectedTab != .advanced)
+            if visitedTabs.contains(.server) {
+                ServerTab()
+                    .opacity(selectedTab == .server ? 1 : 0)
+                    .accessibilityHidden(selectedTab != .server)
+            }
+            if visitedTabs.contains(.uploads) {
+                UploadsTab()
+                    .opacity(selectedTab == .uploads ? 1 : 0)
+                    .accessibilityHidden(selectedTab != .uploads)
+            }
+            if visitedTabs.contains(.shortcuts) {
+                ShortcutsTab()
+                    .opacity(selectedTab == .shortcuts ? 1 : 0)
+                    .accessibilityHidden(selectedTab != .shortcuts)
+            }
+            if visitedTabs.contains(.general) {
+                GeneralTab()
+                    .opacity(selectedTab == .general ? 1 : 0)
+                    .accessibilityHidden(selectedTab != .general)
+            }
+            if visitedTabs.contains(.advanced) {
+                AdvancedTab()
+                    .opacity(selectedTab == .advanced ? 1 : 0)
+                    .accessibilityHidden(selectedTab != .advanced)
+            }
         }
     }
 }
