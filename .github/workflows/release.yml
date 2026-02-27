@@ -84,12 +84,19 @@ jobs:
           ditto -c -k notarize-payload notarize-payload.zip
           xcrun notarytool submit notarize-payload.zip --wait
 
+      - name: Create app bundle
+        run: |
+          mkdir -p DropShot.app/Contents/MacOS
+          mkdir -p DropShot.app/Contents/Resources
+          cp .build/universal/DropShot DropShot.app/Contents/MacOS/
+          cp DropShot/App/Info.plist DropShot.app/Contents/
+
       - name: Create DMG
         env:
           RELEASE_VERSION: ${{ steps.version.outputs.VERSION }}
         run: |
           mkdir -p dmg-staging
-          cp .build/universal/DropShot dmg-staging/
+          cp -R DropShot.app dmg-staging/
           hdiutil create -volname "DropShot" \
             -srcfolder dmg-staging \
             -ov -format UDZO \
