@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 
+
 ### Added
 
 - macOS menu bar app with drag-and-drop file upload via SFTP
@@ -39,4 +41,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Homebrew cask formula
 - Server setup guide for new users
 
-[Unreleased]: https://github.com/kojott/dropshot/compare/HEAD
+[Unreleased]: https://github.com/kojott/dropshot/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/kojott/dropshot/compare/v1.0.0...v1.0.1
