@@ -65,14 +65,23 @@ struct PreferencesView: View {
         .background(.background)
     }
 
-    @ViewBuilder
     private var content: some View {
-        switch selectedTab {
-        case .server: ServerTab()
-        case .uploads: UploadsTab()
-        case .shortcuts: ShortcutsTab()
-        case .general: GeneralTab()
-        case .advanced: AdvancedTab()
+        ZStack {
+            ServerTab()
+                .opacity(selectedTab == .server ? 1 : 0)
+                .accessibilityHidden(selectedTab != .server)
+            UploadsTab()
+                .opacity(selectedTab == .uploads ? 1 : 0)
+                .accessibilityHidden(selectedTab != .uploads)
+            ShortcutsTab()
+                .opacity(selectedTab == .shortcuts ? 1 : 0)
+                .accessibilityHidden(selectedTab != .shortcuts)
+            GeneralTab()
+                .opacity(selectedTab == .general ? 1 : 0)
+                .accessibilityHidden(selectedTab != .general)
+            AdvancedTab()
+                .opacity(selectedTab == .advanced ? 1 : 0)
+                .accessibilityHidden(selectedTab != .advanced)
         }
     }
 }
