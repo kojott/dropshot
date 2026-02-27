@@ -39,4 +39,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Homebrew cask formula
 - Server setup guide for new users
 
-[Unreleased]: https://github.com/nickarino/DropShot/compare/HEAD
+[Unreleased]: https://github.com/kojott/dropshot/compare/HEAD
