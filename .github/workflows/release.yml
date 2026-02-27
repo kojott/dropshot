@@ -105,6 +105,7 @@ jobs:
         run: |
           mkdir -p dmg-staging
           cp -R DropShot.app dmg-staging/
+          ln -s /Applications dmg-staging/Applications
           hdiutil create -volname "DropShot" \
             -srcfolder dmg-staging \
             -ov -format UDZO \
