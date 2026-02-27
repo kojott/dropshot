@@ -796,14 +796,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 560, height: 480),
+            contentRect: NSRect(x: 0, y: 0, width: 620, height: 480),
             styleMask: [.titled, .closable, .miniaturizable, .resizable],
             backing: .buffered,
             defer: false
         )
         window.title = "DropShot Preferences"
         window.contentView = NSHostingView(rootView: PreferencesView())
-        window.contentMinSize = NSSize(width: 480, height: 400)
+        window.contentMinSize = NSSize(width: 560, height: 420)
         window.center()
         window.isReleasedWhenClosed = false
         window.makeKeyAndOrderFront(nil)

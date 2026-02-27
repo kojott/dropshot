@@ -6,53 +6,106 @@ import ServiceManagement
 // MARK: - Preferences Tab
 
 /// Identifies each tab in the preferences window.
-private enum PreferencesTab: Hashable {
+enum PreferencesTab: String, CaseIterable, Identifiable {
     case server
     case uploads
     case shortcuts
     case general
+    case advanced
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .server: return "Server"
+        case .uploads: return "Uploads"
+        case .shortcuts: return "Shortcuts"
+        case .general: return "General"
+        case .advanced: return "Advanced"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .server: return "server.rack"
+        case .uploads: return "arrow.up.doc"
+        case .shortcuts: return "keyboard"
+        case .general: return "gearshape"
+        case .advanced: return "wrench.and.screwdriver"
+        }
+    }
 }
 
 // MARK: - Preferences View
 
-/// Four-tab preferences window for configuring DropShot.
-/// Designed for a 500x400pt window hosted via NSHostingController.
+/// Sidebar-navigated preferences window for configuring DropShot.
 struct PreferencesView: View {
     @State private var selectedTab: PreferencesTab = .server
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            ServerTab()
-                .tabItem {
-                    Label("Server", systemImage: "server.rack")
-                }
-                .tag(PreferencesTab.server)
-
-            UploadsTab()
-                .tabItem {
-                    Label("Uploads", systemImage: "arrow.up.doc")
-                }
-                .tag(PreferencesTab.uploads)
-
-            ShortcutsTab()
-                .tabItem {
-                    Label("Shortcuts", systemImage: "keyboard")
-                }
-                .tag(PreferencesTab.shortcuts)
-
-            GeneralTab()
-                .tabItem {
-                    Label("General", systemImage: "gearshape")
-                }
-                .tag(PreferencesTab.general)
+        HStack(spacing: 0) {
+            sidebar
+            Divider()
+            content
         }
-        .frame(width: 500, height: 400)
+        .frame(width: 620, height: 480)
+    }
+
+    private var sidebar: some View {
+        VStack(spacing: 2) {
+            ForEach(PreferencesTab.allCases) { tab in
+                SidebarRow(tab: tab, isSelected: selectedTab == tab)
+                    .onTapGesture { selectedTab = tab }
+            }
+            Spacer()
+        }
+        .padding(.vertical, 12)
+        .padding(.horizontal, 4)
+        .frame(width: 150)
+        .background(.background)
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        switch selectedTab {
+        case .server: ServerTab()
+        case .uploads: UploadsTab()
+        case .shortcuts: ShortcutsTab()
+        case .general: GeneralTab()
+        case .advanced: AdvancedTab()
+        }
+    }
+}
+
+// MARK: - Sidebar Row
+
+private struct SidebarRow: View {
+    let tab: PreferencesTab
+    let isSelected: Bool
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: tab.icon)
+                .frame(width: 20)
+                .foregroundStyle(isSelected ? .white : .secondary)
+            Text(tab.label)
+                .foregroundStyle(isSelected ? .white : .primary)
+            Spacer()
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(
+            RoundedRectangle(cornerRadius: 6)
+                .fill(isSelected ? Color.accentColor : Color.clear)
+        )
+        .contentShape(Rectangle())
     }
 }
 
 // MARK: - Server Tab
 
 /// Server connection settings: host, credentials, paths, and connection testing.
+/// Keeps explicit Save button because server config changes should be intentional.
 private struct ServerTab: View {
     @State private var host: String = ""
     @State private var port: Int = 22
@@ -278,10 +331,12 @@ private struct TestConnectionResult {
 // MARK: - Uploads Tab
 
 /// File handling settings: filename patterns, size limits, duplicate handling.
+/// Auto-saves on every change.
 private struct UploadsTab: View {
     @State private var filenamePattern: FilenamePattern = .original
     @State private var maxFileSizeMB: Int = 100
     @State private var duplicateHandling: DuplicateHandling = .appendSuffix
+    @State private var isLoaded = false
 
     var body: some View {
         Form {
@@ -335,20 +390,12 @@ private struct UploadsTab: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-
-            Section {
-                HStack {
-                    Spacer()
-                    Button("Save") {
-                        saveUploadSettings()
-                    }
-                    .keyboardShortcut(.defaultAction)
-                    .accessibilityLabel("Save upload settings")
-                }
-            }
         }
         .formStyle(.grouped)
         .onAppear(perform: loadSettings)
+        .onChange(of: filenamePattern) { _ in autoSave() }
+        .onChange(of: maxFileSizeMB) { _ in autoSave() }
+        .onChange(of: duplicateHandling) { _ in autoSave() }
     }
 
     private func loadSettings() {
@@ -356,9 +403,11 @@ private struct UploadsTab: View {
         filenamePattern = settings.filenamePattern
         maxFileSizeMB = settings.maxFileSizeMB
         duplicateHandling = settings.duplicateHandling
+        isLoaded = true
     }
 
-    private func saveUploadSettings() {
+    private func autoSave() {
+        guard isLoaded else { return }
         var settings = AppSettings.shared
         settings.filenamePattern = filenamePattern
         settings.maxFileSizeMB = maxFileSizeMB
@@ -370,9 +419,11 @@ private struct UploadsTab: View {
 // MARK: - Shortcuts Tab
 
 /// Global keyboard shortcut configuration using the KeyboardShortcuts package.
+/// Auto-saves on every change.
 private struct ShortcutsTab: View {
     @State private var screenshotShortcutEnabled: Bool = true
     @State private var clipboardUploadShortcutEnabled: Bool = false
+    @State private var isLoaded = false
 
     var body: some View {
         Form {
@@ -397,29 +448,22 @@ private struct ShortcutsTab: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-
-            Section {
-                HStack {
-                    Spacer()
-                    Button("Save") {
-                        saveShortcutSettings()
-                    }
-                    .keyboardShortcut(.defaultAction)
-                    .accessibilityLabel("Save shortcut settings")
-                }
-            }
         }
         .formStyle(.grouped)
         .onAppear(perform: loadSettings)
+        .onChange(of: screenshotShortcutEnabled) { _ in autoSave() }
+        .onChange(of: clipboardUploadShortcutEnabled) { _ in autoSave() }
     }
 
     private func loadSettings() {
         let settings = AppSettings.shared
         screenshotShortcutEnabled = settings.screenshotShortcutEnabled
         clipboardUploadShortcutEnabled = settings.clipboardUploadShortcutEnabled
+        isLoaded = true
     }
 
-    private func saveShortcutSettings() {
+    private func autoSave() {
+        guard isLoaded else { return }
         var settings = AppSettings.shared
         settings.screenshotShortcutEnabled = screenshotShortcutEnabled
         settings.clipboardUploadShortcutEnabled = clipboardUploadShortcutEnabled
@@ -430,20 +474,19 @@ private struct ShortcutsTab: View {
 // MARK: - General Tab
 
 /// Application-wide preferences: launch at login, notifications, diagnostics.
+/// Auto-saves on every change (except reset which has confirmation).
 private struct GeneralTab: View {
     @State private var launchAtLogin: Bool = false
     @State private var showNotifications: Bool = true
     @State private var playSound: Bool = false
     @State private var showResetConfirmation: Bool = false
     @State private var showExportSuccess: Bool = false
+    @State private var isLoaded = false
 
     var body: some View {
         Form {
             Section("Startup") {
                 Toggle("Launch DropShot at login", isOn: $launchAtLogin)
-                    .onChange(of: launchAtLogin) { newValue in
-                        updateLaunchAtLogin(newValue)
-                    }
                     .accessibilityLabel("Launch at login")
             }
 
@@ -469,25 +512,21 @@ private struct GeneralTab: View {
             }
 
             Section {
-                HStack {
-                    Button("Reset to Defaults", role: .destructive) {
-                        showResetConfirmation = true
-                    }
-                    .accessibilityLabel("Reset all settings to defaults")
-                    .accessibilityHint("This will erase all your custom settings")
-
-                    Spacer()
-
-                    Button("Save") {
-                        saveGeneralSettings()
-                    }
-                    .keyboardShortcut(.defaultAction)
-                    .accessibilityLabel("Save general settings")
+                Button("Reset to Defaults", role: .destructive) {
+                    showResetConfirmation = true
                 }
+                .accessibilityLabel("Reset all settings to defaults")
+                .accessibilityHint("This will erase all your custom settings")
             }
         }
         .formStyle(.grouped)
         .onAppear(perform: loadSettings)
+        .onChange(of: launchAtLogin) { newValue in
+            updateLaunchAtLogin(newValue)
+            autoSave()
+        }
+        .onChange(of: showNotifications) { _ in autoSave() }
+        .onChange(of: playSound) { _ in autoSave() }
         .alert("Reset to Defaults?", isPresented: $showResetConfirmation) {
             Button("Cancel", role: .cancel) {}
             Button("Reset", role: .destructive) {
@@ -503,9 +542,11 @@ private struct GeneralTab: View {
         launchAtLogin = settings.launchAtLogin
         showNotifications = settings.showNotifications
         playSound = settings.playSound
+        isLoaded = true
     }
 
-    private func saveGeneralSettings() {
+    private func autoSave() {
+        guard isLoaded else { return }
         var settings = AppSettings.shared
         settings.launchAtLogin = launchAtLogin
         settings.showNotifications = showNotifications
@@ -570,6 +611,9 @@ private struct GeneralTab: View {
           Sound: \(settings.playSound)
           Screenshot Shortcut Enabled: \(settings.screenshotShortcutEnabled)
           Clipboard Shortcut Enabled: \(settings.clipboardUploadShortcutEnabled)
+          Delete Local After Upload: \(settings.deleteLocalAfterUpload)
+          Auto-Delete Remote Files: \(settings.autoDeleteRemoteFiles)
+          Remote File TTL: \(settings.remoteFileTTL.displayName)
           Setup Completed: \(settings.hasCompletedSetup)
         ----------------------------------------
         """
@@ -580,5 +624,74 @@ private struct GeneralTab: View {
     private func resetToDefaults() {
         AppSettings.resetToDefaults()
         loadSettings()
+    }
+}
+
+// MARK: - Advanced Tab
+
+/// File cleanup settings: local temp file removal and remote file auto-deletion.
+/// Auto-saves on every change.
+private struct AdvancedTab: View {
+    @State private var deleteLocalAfterUpload: Bool = true
+    @State private var autoDeleteRemoteFiles: Bool = false
+    @State private var remoteFileTTL: RemoteFileTTL = .sevenDays
+    @State private var isLoaded = false
+
+    var body: some View {
+        Form {
+            Section("Local Files") {
+                Toggle("Delete local files after upload", isOn: $deleteLocalAfterUpload)
+                    .accessibilityLabel("Delete local files after upload")
+                Text("Temporary files are removed immediately after a successful upload.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            Section("Remote File Cleanup") {
+                Toggle("Auto-delete uploaded files from server", isOn: $autoDeleteRemoteFiles)
+                    .accessibilityLabel("Auto-delete remote files")
+
+                if autoDeleteRemoteFiles {
+                    Picker("Delete after:", selection: $remoteFileTTL) {
+                        ForEach(RemoteFileTTL.allCases, id: \.self) { ttl in
+                            Text(ttl.displayName).tag(ttl)
+                        }
+                    }
+                    .accessibilityLabel("Remote file lifetime")
+
+                    Label {
+                        Text("Files will be permanently deleted from the server after \(remoteFileTTL.displayName.lowercased()). This cannot be undone.")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    } icon: {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.orange)
+                            .font(.caption)
+                    }
+                }
+            }
+        }
+        .formStyle(.grouped)
+        .onAppear(perform: loadSettings)
+        .onChange(of: deleteLocalAfterUpload) { _ in autoSave() }
+        .onChange(of: autoDeleteRemoteFiles) { _ in autoSave() }
+        .onChange(of: remoteFileTTL) { _ in autoSave() }
+    }
+
+    private func loadSettings() {
+        let settings = AppSettings.shared
+        deleteLocalAfterUpload = settings.deleteLocalAfterUpload
+        autoDeleteRemoteFiles = settings.autoDeleteRemoteFiles
+        remoteFileTTL = settings.remoteFileTTL
+        isLoaded = true
+    }
+
+    private func autoSave() {
+        guard isLoaded else { return }
+        var settings = AppSettings.shared
+        settings.deleteLocalAfterUpload = deleteLocalAfterUpload
+        settings.autoDeleteRemoteFiles = autoDeleteRemoteFiles
+        settings.remoteFileTTL = remoteFileTTL
+        settings.save()
     }
 }

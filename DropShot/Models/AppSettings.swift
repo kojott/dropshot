@@ -41,6 +41,42 @@ enum DuplicateHandling: String, Codable, CaseIterable {
     }
 }
 
+// MARK: - Remote File TTL
+
+enum RemoteFileTTL: String, Codable, CaseIterable {
+    case oneHour = "1h"
+    case sixHours = "6h"
+    case twelveHours = "12h"
+    case oneDay = "1d"
+    case sevenDays = "7d"
+    case thirtyDays = "30d"
+    case ninetyDays = "90d"
+
+    var displayName: String {
+        switch self {
+        case .oneHour: return "1 Hour"
+        case .sixHours: return "6 Hours"
+        case .twelveHours: return "12 Hours"
+        case .oneDay: return "1 Day"
+        case .sevenDays: return "7 Days"
+        case .thirtyDays: return "30 Days"
+        case .ninetyDays: return "90 Days"
+        }
+    }
+
+    var timeInterval: TimeInterval {
+        switch self {
+        case .oneHour: return 3600
+        case .sixHours: return 21600
+        case .twelveHours: return 43200
+        case .oneDay: return 86400
+        case .sevenDays: return 604800
+        case .thirtyDays: return 2592000
+        case .ninetyDays: return 7776000
+        }
+    }
+}
+
 // MARK: - App Settings
 
 struct AppSettings: Codable, Equatable {
@@ -59,6 +95,11 @@ struct AppSettings: Codable, Equatable {
     var screenshotShortcutEnabled: Bool
     var clipboardUploadShortcutEnabled: Bool
 
+    // Cleanup
+    var deleteLocalAfterUpload: Bool
+    var autoDeleteRemoteFiles: Bool
+    var remoteFileTTL: RemoteFileTTL
+
     // Onboarding
     var hasCompletedSetup: Bool
 
@@ -71,6 +112,9 @@ struct AppSettings: Codable, Equatable {
         playSound: Bool = false,
         screenshotShortcutEnabled: Bool = true,
         clipboardUploadShortcutEnabled: Bool = false,
+        deleteLocalAfterUpload: Bool = true,
+        autoDeleteRemoteFiles: Bool = false,
+        remoteFileTTL: RemoteFileTTL = .sevenDays,
         hasCompletedSetup: Bool = false
     ) {
         self.filenamePattern = filenamePattern
@@ -81,6 +125,9 @@ struct AppSettings: Codable, Equatable {
         self.playSound = playSound
         self.screenshotShortcutEnabled = screenshotShortcutEnabled
         self.clipboardUploadShortcutEnabled = clipboardUploadShortcutEnabled
+        self.deleteLocalAfterUpload = deleteLocalAfterUpload
+        self.autoDeleteRemoteFiles = autoDeleteRemoteFiles
+        self.remoteFileTTL = remoteFileTTL
         self.hasCompletedSetup = hasCompletedSetup
     }
 
