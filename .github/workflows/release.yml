@@ -91,6 +91,14 @@ jobs:
           cp .build/universal/DropShot DropShot.app/Contents/MacOS/
           cp DropShot/App/Info.plist DropShot.app/Contents/
 
+          # Compile asset catalog (app icon) into the bundle
+          xcrun actool DropShot/Resources/Assets.xcassets \
+            --compile DropShot.app/Contents/Resources \
+            --platform macosx \
+            --minimum-deployment-target 13.0 \
+            --app-icon AppIcon \
+            --output-partial-info-plist /dev/null
+
       - name: Create DMG
         env:
           RELEASE_VERSION: ${{ steps.version.outputs.VERSION }}
