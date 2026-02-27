@@ -3,8 +3,11 @@ import KeyboardShortcuts
 
 // MARK: - Shortcut Recorder View
 
-/// A consistent wrapper around `KeyboardShortcuts.Recorder` that pairs a
-/// labeled enable/disable toggle with the shortcut recorder control.
+/// A labeled enable/disable toggle paired with the current shortcut display.
+///
+/// Uses `KeyboardShortcuts.Recorder` with the documented SwiftUI API
+/// (`Recorder(_:name:)`) which integrates correctly with SwiftUI's
+/// view lifecycle, avoiding NSViewRepresentable issues in custom windows.
 ///
 /// When the toggle is off, the recorder is visually disabled to indicate
 /// that the shortcut will not fire even if a key combination is assigned.
@@ -26,7 +29,7 @@ struct ShortcutRecorderView: View {
 
             Spacer()
 
-            KeyboardShortcuts.Recorder(for: name)
+            KeyboardShortcuts.Recorder("", name: name)
                 .disabled(!isEnabled)
                 .opacity(isEnabled ? 1.0 : 0.5)
                 .accessibilityLabel("Keyboard shortcut for \(label)")
