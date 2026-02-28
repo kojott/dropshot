@@ -217,17 +217,33 @@ final class UploadManager: ObservableObject {
         isCancelled = true
         logger.info("Cancel requested for current upload.")
 
-        guard let record = currentUpload, let transport = transport else { return }
+        // Terminate the running SFTP process immediately so waitUntilExit() returns.
+        if let transport = transport {
+            await transport.cancelUpload()
+        }
 
-        // Attempt to clean up the partial remote file.
-        do {
-            let exists = try await transport.fileExists(remotePath: record.serverPath)
-            if exists {
-                try await transport.removeFile(remotePath: record.serverPath)
-                logger.info("Removed partial remote file: \(record.serverPath)")
+        // Cancel the processing task.
+        processingTask?.cancel()
+        processingTask = nil
+
+        guard let record = currentUpload else {
+            isUploading = false
+            overallProgress = 0.0
+            pendingFiles.removeAll()
+            return
+        }
+
+        // Attempt to clean up the partial remote file (best-effort, don't block on failure).
+        if let transport = transport {
+            do {
+                let exists = try await transport.fileExists(remotePath: record.serverPath)
+                if exists {
+                    try await transport.removeFile(remotePath: record.serverPath)
+                    logger.info("Removed partial remote file: \(record.serverPath)")
+                }
+            } catch {
+                logger.warning("Failed to remove partial remote file: \(error.localizedDescription)")
             }
-        } catch {
-            logger.warning("Failed to remove partial remote file: \(error.localizedDescription)")
         }
 
         // Mark the record as cancelled.
@@ -247,6 +263,11 @@ final class UploadManager: ObservableObject {
         updateQueueRecord(cancelledRecord)
         currentUpload = cancelledRecord
         await historyService.updateRecord(cancelledRecord)
+
+        // Reset state so the app is ready for new uploads.
+        isUploading = false
+        overallProgress = 0.0
+        pendingFiles.removeAll()
     }
 
     /// Cancels the current upload and clears the entire pending queue.
@@ -262,8 +283,6 @@ final class UploadManager: ObservableObject {
         }
 
         pendingFiles.removeAll()
-        processingTask?.cancel()
-        processingTask = nil
         isUploading = false
         overallProgress = 0.0
         currentUpload = nil

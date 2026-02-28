@@ -13,6 +13,9 @@ actor SystemSFTPTransport: SFTPTransport {
     private var controlPath: String?
     private(set) var isConnected: Bool = false
 
+    /// The currently running SFTP/SSH process, if any. Used by `cancelUpload()` to terminate a hanging transfer.
+    private var activeProcess: Process?
+
     private let logger = Logger(subsystem: "com.dropshot", category: "SFTPTransport")
 
     /// Threshold in bytes above which progress estimation is enabled during uploads.
@@ -20,6 +23,12 @@ actor SystemSFTPTransport: SFTPTransport {
 
     /// Interval between synthetic progress updates during upload.
     private let progressUpdateInterval: TimeInterval = 0.25
+
+    /// Maximum seconds an upload can stall (no progress) before being auto-terminated.
+    private let uploadStallTimeout: TimeInterval = 30
+
+    /// Maximum total seconds for a small-file upload before being auto-terminated.
+    private let smallFileTimeout: TimeInterval = 60
 
     // MARK: - Connection
 
@@ -171,8 +180,8 @@ actor SystemSFTPTransport: SFTPTransport {
                 duration: duration
             )
         } else {
-            // Small file or no progress handler: run synchronously.
-            let result = try await runProcess("/usr/bin/sftp", arguments: sftpArgs, input: batchCommand)
+            // Small file or no progress handler: run with a total deadline timeout.
+            let result = try await runProcess("/usr/bin/sftp", arguments: sftpArgs, input: batchCommand, timeout: smallFileTimeout)
             let duration = Date().timeIntervalSince(startTime)
 
             if result.exitCode != 0 {
@@ -298,6 +307,18 @@ actor SystemSFTPTransport: SFTPTransport {
         self.controlPath = nil
 
         logger.info("Disconnected")
+    }
+
+    // MARK: - Cancel Upload
+
+    func cancelUpload() async {
+        guard let process = activeProcess, process.isRunning else {
+            logger.debug("cancelUpload called but no active process")
+            return
+        }
+        logger.info("Terminating active SFTP process (pid \(process.processIdentifier))")
+        process.terminate()
+        activeProcess = nil
     }
 
     // MARK: - Test Connection
@@ -430,7 +451,8 @@ actor SystemSFTPTransport: SFTPTransport {
     private func runProcess(
         _ executable: String,
         arguments: [String],
-        input: String?
+        input: String?,
+        timeout: TimeInterval? = nil
     ) async throws -> (stdout: String, stderr: String, exitCode: Int32) {
         try Task.checkCancellation()
 
@@ -462,11 +484,25 @@ actor SystemSFTPTransport: SFTPTransport {
             try process.run()
         }
 
+        // Track this process so cancelUpload() can terminate it.
+        activeProcess = process
+
+        // Set up a deadline timer if a timeout was requested.
+        var timeoutWorkItem: DispatchWorkItem?
+        if let timeout = timeout {
+            let item = DispatchWorkItem { [weak process] in
+                guard let process = process, process.isRunning else { return }
+                process.terminate()
+            }
+            timeoutWorkItem = item
+            DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + timeout, execute: item)
+        }
+
         // Read stdout and stderr concurrently.
         // Use nonisolated(unsafe) since access is synchronized via DispatchGroup:
         // each var is written exactly once (in its own async block) and read only
         // after all blocks have completed (in group.notify).
-        return await withCheckedContinuation { continuation in
+        let result: (stdout: String, stderr: String, exitCode: Int32) = await withCheckedContinuation { continuation in
             let group = DispatchGroup()
             nonisolated(unsafe) var stdoutData = Data()
             nonisolated(unsafe) var stderrData = Data()
@@ -495,6 +531,17 @@ actor SystemSFTPTransport: SFTPTransport {
                 continuation.resume(returning: (stdout: stdout, stderr: stderr, exitCode: process.terminationStatus))
             }
         }
+
+        let wasTimedOut = timeoutWorkItem != nil && process.terminationReason == .uncaughtSignal
+        timeoutWorkItem?.cancel()
+        activeProcess = nil
+
+        // If the process was killed by our timeout timer or by cancelUpload(), throw appropriately.
+        if process.terminationReason == .uncaughtSignal {
+            throw wasTimedOut ? SFTPError.timeout : SFTPError.cancelled
+        }
+
+        return result
     }
 
     // MARK: - Upload With Progress Estimation
@@ -511,25 +558,39 @@ actor SystemSFTPTransport: SFTPTransport {
         progress: @escaping UploadProgressHandler
     ) async throws -> (stdout: String, stderr: String, exitCode: Int32) {
         let startTime = Date()
+        let stallTimeout = uploadStallTimeout
 
-        // Start the actual upload.
+        // Start the actual upload (no per-call timeout; stall detection handles it).
         async let uploadTask = runProcess("/usr/bin/sftp", arguments: sftpArgs, input: batchCommand)
 
-        // Run a progress estimation loop concurrently.
-        let progressTask = Task {
+        // Run a progress estimation loop concurrently with stall detection.
+        let progressTask = Task { [weak self] in
             // Conservative estimate: 5 MB/s baseline. Progress will never exceed 95%
             // until the upload actually completes.
             let estimatedRate: Double = 5_000_000 // bytes per second
             let maxEstimatedProgress: Double = 0.95
 
             while !Task.isCancelled {
-                try await Task.sleep(nanoseconds: UInt64(progressUpdateInterval * 1_000_000_000))
+                let interval = self?.progressUpdateInterval ?? 0.25
+                try await Task.sleep(nanoseconds: UInt64(interval * 1_000_000_000))
 
                 let elapsed = Date().timeIntervalSince(startTime)
                 let estimatedBytes = Int64(elapsed * estimatedRate)
                 let clampedBytes = min(estimatedBytes, Int64(Double(fileSize) * maxEstimatedProgress))
 
                 progress(clampedBytes, fileSize)
+
+                // Stall detection: if the estimated transfer time far exceeds what
+                // a reasonable connection would take, terminate. We use a generous
+                // multiplier: if elapsed > (fileSize / 100KB/s) + stallTimeout,
+                // the connection is likely dead.
+                let minimumExpectedRate: Double = 100_000 // 100 KB/s absolute floor
+                let expectedDuration = Double(fileSize) / minimumExpectedRate
+                if elapsed > expectedDuration + stallTimeout {
+                    // Terminate the stalled process.
+                    await self?.cancelUpload()
+                    return
+                }
             }
         }
 

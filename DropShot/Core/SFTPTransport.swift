@@ -118,6 +118,9 @@ protocol SFTPTransport: Actor {
     /// Disconnects from the remote server.
     func disconnect() async
 
+    /// Cancels any in-flight upload by terminating the underlying process.
+    func cancelUpload() async
+
     /// Whether the transport is currently connected.
     var isConnected: Bool { get }
 
